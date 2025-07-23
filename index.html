@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Date & Time</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Delius&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Amarante&family=Delius&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: rgba(17, 2, 2, 0.853);
+        }
+
+        h1 {
+            font-size: 40px;
+            text-align: center;
+            margin: 50px 0 30px 0;
+            font-family: "Delius", cursive;
+            font-weight: 400;
+            font-style: normal;
+            color: whitesmoke;
+        }
+
+        .inp-box {
+            height: 50px;
+            text-align: center;
+            outline: 0;
+            font-size: 15px;
+            letter-spacing: 2px;
+            background-color: transparent;
+            color: whitesmoke;
+            border: 1px solid rgba(131, 120, 120, 0.915);
+        }
+
+        .a {
+            position: relative;
+        }
+
+        label {
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: absolute;
+            top: -6px;
+            left: 15px;
+            padding-left: 4px;
+            padding-right: 2px;
+            font-size: small;
+            color: whitesmoke;
+            background-color: rgba(1, 1, 1, 0.91);
+            border-radius: 2px;
+        }
+
+        .date-time-container {
+            margin-top: 110px;
+            display: flex;
+            justify-content: space-evenly;
+        }
+
+        .quote-container {
+            text-align: center;
+            margin-top: 8%;
+            margin-left: 10%;
+            margin-right: 10%;
+            background-color: rgba(15, 12, 12, 0.3);
+            padding: 30px;
+            font-family: "Delius", cursive;
+            font-weight: 400;
+            font-style: normal;
+            color: whitesmoke;
+            border-radius: 10px;
+            box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+        }
+
+        .quote {
+            font-size: 20px;
+            padding: 10px;
+        }
+
+        .author {
+            text-align: end;
+            font-size: 17px;
+            padding: 5px 50px 10px 0;
+        }
+
+        .quote::before {
+            content: '❝ ';
+            font-size: 30px;
+        }
+
+        .quote::after {
+            content: ' ❞';
+            font-size: 30px;
+        }
+
+        .author::before {
+            content: '~ ';
+        }
+
+        hr {
+            margin: 20px;
+        }
+
+        button {
+            cursor: pointer;
+            padding: 10px 20px;
+            text-transform: capitalize;
+            letter-spacing: 1px;
+            border-radius: 5px;
+            border: none;
+            color: whitesmoke;
+            background-color: rgba(16, 3, 3, 0.277);
+        }
+
+        button:hover {
+            scale: 1.1;
+        }
+
+        .btns {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 20px;
+            margin-right: 70px;
+        }
+
+        footer {
+            text-align: center;
+            color: white;
+            letter-spacing: 1px;
+            margin-top: 100px;
+            font-size: 15px;
+        }
+
+        @media (max-width: 700px) {
+
+            body {
+                scroll-behavior: smooth;
+            }
+
+            h1 {
+                font-size: 30px;
+            }
+
+            .date-time-container {
+                margin-top: -1px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 30px;
+            }
+
+            .btns {
+                justify-content: center;
+            }
+
+        }
+    </style>
+</head>
+
+<body onload="fetchData(); getDateTime()">
+
+    <section>
+        <h1>Today's Date & Time</h1>
+        <div class="date-time-container">
+            <div class="a">
+                <input type="text" id="year" class="inp-box">
+                <label for="year">year</label>
+            </div>
+
+            <div class="a">
+                <input type="text" id="month" class="inp-box">
+                <label for="month">month</label>
+            </div>
+
+            <div class="a">
+                <input type="text" id="date" class="inp-box">
+                <label for="date">date</label>
+            </div>
+
+            <div class="a">
+                <input type="text" id="day" class="inp-box">
+                <label for="day">day</label>
+            </div>
+
+            <div class="a">
+                <input type="text" id="hours" class="inp-box">
+                <label for="hours">hours</label>
+            </div>
+
+            <div class="a">
+                <input type="text" id="minutes" class="inp-box">
+                <label for="minutes">minutes</label>
+            </div>
+
+            <div class="a">
+                <input type="text" id="seconds" class="inp-box">
+                <label for="seconds">seconds</label>
+            </div>
+        </div>
+
+        <div class="quote-container">
+            <p class="quote" id="quote"></p>
+            <p class="author" id="author"></p>
+            <hr>
+            <div class="btns">
+                <button onclick="getQuote()">Get A New Quote</button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© <span class="year">2025</span> SSK Creations. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+        function getDateTime() {
+            document.getElementById('year').value = new Date().getFullYear();
+            document.getElementById('month').value = months[new Date().getMonth()];
+            document.getElementById('date').value = new Date().getDate();
+            document.getElementById('day').value = days[new Date().getDay()];
+            document.getElementById('hours').value = new Date().getHours();
+            document.getElementById('minutes').value = new Date().getMinutes();
+            document.getElementById('seconds').value = new Date().getSeconds();
+        }
+
+        async function getQuote() {
+
+            let response = await fetch('https://dummyjson.com/quotes/random');
+            let data = await response.json();
+            localStorage.setItem('quoteData', JSON.stringify(data))
+            document.getElementById('quote').innerText = JSON.parse(localStorage.getItem('quoteData'))['quote'];
+            document.getElementById('author').innerText = JSON.parse(localStorage.getItem('quoteData'))['author'];
+        }
+
+        function fetchData() {
+            document.getElementById('quote').innerText = JSON.parse(localStorage.getItem('quoteData'))['quote'];
+            document.getElementById('author').innerText = JSON.parse(localStorage.getItem('quoteData'))['author'];
+        }
+
+        setInterval(getDateTime, 1000)
+        setInterval(getQuote, 3600000)
+    </script>
+</body>
+
+</html>
